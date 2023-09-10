@@ -25,26 +25,26 @@ sudo systemctl enable ssh
 #### 二、VS2019环境准备
 ##### 2.1、插件安装
 &emsp;这里假设大家都是通过 [vs installer](https://visualstudio.microsoft.com/downloads/) 安装的 VS2019. 所以这里搜索打开即可, 如下图所示:
-![remote](../blogimg/vs_remote_linux_01.png)
+![remote](../blogimg/vs_remote_linux/vs_remote_linux_01.png)
 安装 __使用 C++ 的 Linux 开发__ 插件, 如下图所示:
 
-![remote](../blogimg/vs_remote_linux_02.png)
+![remote](../blogimg/vs_remote_linux/vs_remote_linux_02.png)
 安装好后就可以开始设置远程连接目标了。
 
 ##### 2.2、添加目标机器
 &emsp;打开 VS2019 后, 依次通过 __Tools__ -> __Options__ -> __Cross Platform__ 打开对话框, 如下图所示：
-![remote](../blogimg/vs_remote_linux_03.png)
+![remote](../blogimg/vs_remote_linux/vs_remote_linux_03.png)
 点击 __Add__ 按钮设置目标机器信息:
-![remote](../blogimg/vs_remote_linux_04.png)
+![remote](../blogimg/vs_remote_linux/vs_remote_linux_04.png)
 输入目标机器的地址, 用户名和密码即可, 其余两项就用默认参数即可。连接好后能识别出主机操作系统的类型,如下图所示。
-![remote](../blogimg/vs_remote_linux_05.png)
+![remote](../blogimg/vs_remote_linux/vs_remote_linux_05.png)
 
 #### 三、远程调试
 &emsp;将工程代码拷贝到 windows 系统中, 使用 VS2019直接打开文件夹。当然也可以构建VS的工程再打开。
 通过 __Debug__ -> __Attach Process__ 添加进程如下图所示:
-![remote](../blogimg/vs_remote_linux_06.png)
+![remote](../blogimg/vs_remote_linux/vs_remote_linux_06.png)
 之后选择指定的进程即可。本文使用一个名为 __main__的测试程序。
-![remote](../blogimg/vs_remote_linux_07.png)
+![remote](../blogimg/vs_remote_linux/vs_remote_linux_07.png)
 
 假如出现 __Attaching to a process on Linux with GDB as a normal user may fail with "ptrace:Operation not permitted".__ 的错误提示, 则在 linux下执行一下命令:
 ```shell
