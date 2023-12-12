@@ -191,3 +191,4 @@ public:
     process2(data3);// T 是int, value 是 int **********
     process2(data4);// T 是int, value 是 int **********
 ```
+##### 4.4、模板特化
