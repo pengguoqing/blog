@@ -1,11 +1,11 @@
 
-<center> <font face=red size=5> C++性能优化一</font> </center>
+<center> <font face=red size=5> C++性能优化实践 一</font> </center>
 
 [TOC]
 
 &emsp;本文为学习博览吴咏炜和李建忠老师 C++ 性能优化后的总结,本文主要总结模板相关的知识点, 感觉还是了解到了之前比较多没有意识到过或者已经忘了的知识点。
 
-参考文章: [https://learn.microsoft.com/zh-cn/cpp/linux/connect-to-your-remote-linux-computer?view=msvc-170](https://learn.microsoft.com/zh-cn/cpp/linux/connect-to-your-remote-linux-computer?view=msvc-170)
+参考文章: [https://boolan.com/](https://boolan.com/)
 
 #### 一、从模板的偏特化讲起
 &emsp; 偏特化即对部分模板参数进行确定, 或者对部分模板参数进行约束。对于偏特化而言, 一个最经典的例子就是判断一个变量的类型是否为数组, 或者获取数组的 size, 如下所示
@@ -30,7 +30,42 @@ template<class T, size_t N> struct IsArray<T[N]>
 IsArray<int>::m_value    //false
 IsArray<int[6]>::m_value //true         
 ```
-函数模板是没有偏特化的, 假如要达到类似的效果可以借助函数重载或者函数对象模板的偏特化, 如下所示:
+先声明一个模板类让其默认非数组类型, 然后在特化两个数组类型形参的版本来判断数组类型。
+同理还有判断是否为引用类型的,也都是先声明为一个默认模板, 然后再特化两个引用参数的返回 true。
+还有一个关于模板特化的典型案例就是编译期求值,比如阶乘啥的, 如下所示:
+```javascript 
+template <int n>
+struct Factorial
+{
+    static const int m_value = Factorial<n> * Factorial<n-1>::m_value;
+};
+
+template <>
+struct Factorial<0>
+{
+    static const int m_value = 1;
+};
+//假如直接 std::cout<< Factorial<5> <<std::endl; 那么将直接输出 120          
+```
+再或者去除类型的 const
+```javascript 
+template<class T>
+struct RemoveConst
+{
+    using type = T;
+};
+
+template<class T>
+struct RemoveConst<const T>
+{
+    using type = T;
+};
+
+template<class T>
+using RemoveConstT = typename RemoveConst<T>::type;
+```
+
+&emsp;函数模板是没有偏特化的, 假如要达到类似的效果可以借助函数重载或者函数对象模板的偏特化, 如下所示:
 ```javascript
 template<class T> 
 bool CheckIsArray(const T&)
@@ -73,6 +108,7 @@ struct less<void>
         return std::forward<T>(lhs) < std::forward<T>(rhs); 
     }
 
+    //特殊标志, 类似于模板匹配
     typedef void is_transparent;
 };
 ```
@@ -192,3 +228,4 @@ public:
     process2(data4);// T 是int, value 是 int **********
 ```
 ##### 4.4、模板特化
+&emsp;模板类型的特化指的是允许模板类型定义者为模板根据实参的不同，而定义不同实现的能力。 ①特化版本可以和一般版本拥有不同的外部接口和实现。②模板偏特化：也可以对部分模板参数进行特化定义, 称为偏特化。③模板特化支持模板类、模板函数。
